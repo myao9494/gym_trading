@@ -45,3 +45,6 @@ This framework was built in Python 3.5.2
 Twitter: @porta4k
 
 Mail: adrianportabales@gmail.com
+
+## MEMO
+* DATA:['open','high','low','close']
