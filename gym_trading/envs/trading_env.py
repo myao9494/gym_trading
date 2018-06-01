@@ -3,6 +3,8 @@ import itertools
 import gym
 import matplotlib.dates as mdates
 import matplotlib.finance as mf
+# import matplotlib.mpl_finance as mf
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -27,18 +29,18 @@ class TradingEnv(gym.Env):
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(self.sim.min_values, self.sim.max_values)
 
-    def _step(self, action):
+    def step(self, action):
         # Return the observation, done, reward from Simulator and Portfolio
         reward, info = self.portfolio._step(action)
         obs, done = self.sim._step(self.portfolio.open_trade, self.portfolio.curr_trade["Trade Duration"])
         return obs, reward, done, info
 
-    def _reset(self, train=True):
+    def reset(self, train=True):
         obs = self.sim._reset(train)
         self.portfolio._reset(train)
         return obs
 
-    def _generate_summary_stats(self):
+    def generate_summary_stats(self):
         print("SUMMARY STATISTICS")
 
         journal = pd.DataFrame(self.portfolio.journal)
