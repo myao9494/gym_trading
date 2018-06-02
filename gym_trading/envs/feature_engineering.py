@@ -4,7 +4,7 @@ import talib
 import time
 
 
-class FeatureEngineering(object):
+class FeatureEngineering(object):#Feature Engineering (特徴選択）
     def __init__(self, df: pd.DataFrame):
 
         df = self._calculate_return(df)

@@ -7,8 +7,8 @@ class Simulator(object):
     def __init__(self, csv_name, train_split, dummy_period=None, train=True, multiple_trades=False):
         if "EUR" in csv_name:
             df = pd.read_csv(csv_name, parse_dates=[[0, 1]], header=None,
-                             names=['Date', 'Time', 'Open', 'High', 'Low', 'Close', 'Volume'])
-            df = df[~np.isnan(df['Open'])].set_index('Date_Time')
+                             names=['Date', 'Time', 'Open', 'High', 'Low', 'Close', 'Volume'])#data,timeを合わせて、名前を付ける
+            df = df[~np.isnan(df['Open'])].set_index('Date_Time')#~は否定演算子、daat
 
         else:
             df = pd.read_csv(csv_name, usecols=['Date', 'High', 'Low', 'Open', 'Close', 'Volume'])
