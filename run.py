@@ -8,6 +8,7 @@ import tensorflow as tf
 import tensorflow.contrib.layers as layers
 
 import baselines.common.tf_util as U
+import baselines.deepq.utils as UT
 
 from baselines import deepq
 from baselines.deepq.replay_buffer import ReplayBuffer
@@ -26,7 +27,7 @@ def model(inpt, num_actions, scope, reuse=False):
 
 
 def run_test(env, act, episodes=1, final_test=False):
-    obs = env._reset(train=False)
+    obs = env.reset(train=False)
     start = env.sim.train_end_index + 1
     end = env.sim.count - 1
 
@@ -45,17 +46,18 @@ def run_test(env, act, episodes=1, final_test=False):
             print("Average Reward is %s" % (env.portfolio.average_profit_per_trade))
 
     if final_test:
-        env._generate_summary_stats()
+        env.generate_summary_stats()
 
 
 with U.make_session(8):
-    csv = "/home/adrian/Escritorio/polinex/EURUSD60.csv"
+    # csv = "/home/adrian/Escritorio/polinex/EURUSD60.csv"
+    csv = "data/EURUSD60.csv"
 
     env = gym.make('trading-v0')
-    env.initialise_simulator(csv, trade_period=5000, train_split=0.7)
+    env.initialise_simulator(csv, trade_period=50, train_split=0.7)
 
     act, train, update_target, debug = deepq.build_train(
-        make_obs_ph=lambda name: U.BatchInput(env.observation_space.shape, name=name),
+        make_obs_ph=lambda name: UT.BatchInput(env.observation_space.shape, name=name),
         q_func=model,
         num_actions=env.action_space.n,
         optimizer=tf.train.AdamOptimizer(learning_rate=5e-4),
@@ -85,7 +87,7 @@ with U.make_session(8):
 
         episode_rewards[-1] += rew
 
-        is_solved = np.mean(episode_rewards[-101:-1]) > 500 or t >= 10000
+        is_solved = np.mean(episode_rewards[-101:-1]) > 500 or t >= 100000
         is_solved = is_solved and len(env.portfolio.journal) != 0
 
         if done:
@@ -125,7 +127,7 @@ with U.make_session(8):
 
         if is_solved:
             # Show off the result
-            env._generate_summary_stats()
+            env.generate_summary_stats()
             run_test(env, act, final_test=True)
             break
 
