@@ -62,6 +62,10 @@ with U.make_session(8):
         num_actions=env.action_space.n,
         optimizer=tf.train.AdamOptimizer(learning_rate=5e-4),
     )
+    try:
+        UT.load_state( './test_model/test_model')
+    except:
+        print("nodata")
 
     replay_buffer = ReplayBuffer(50000)
     # Create the schedule for exploration starting from 1 (every action is random) down to
@@ -87,7 +91,7 @@ with U.make_session(8):
 
         episode_rewards[-1] += rew
 
-        is_solved = np.mean(episode_rewards[-101:-1]) > 500 or t >= 100000
+        is_solved = np.mean(episode_rewards[-101:-1]) > 1000 or t >= 5000
         is_solved = is_solved and len(env.portfolio.journal) != 0
 
         if done:
@@ -127,6 +131,7 @@ with U.make_session(8):
 
         if is_solved:
             # Show off the result
+            UT.save_state( './test_model/test_model')
             env.generate_summary_stats()
             run_test(env, act, final_test=True)
             break
@@ -137,6 +142,7 @@ with U.make_session(8):
                 obses_t, actions, rewards, obses_tp1, dones = replay_buffer.sample(32)
                 train(obses_t, actions, rewards, obses_tp1, dones, np.ones_like(rewards))
             if t % 500 == 0:
+                UT.save_state( './test_model/test_model')
                 update_target()
 
 
