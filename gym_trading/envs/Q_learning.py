@@ -102,12 +102,15 @@ class Q(object):
                 self.actions.append(actions)
 
     def train(self):
-        self.env._reset()
+        self.env.reset()
         self.run_episodes(self.train_episodes)
 
     def test(self, episodes=1):
-        self.env._reset(train=False)
+        self.env.reset(train=False)
         self.run_episodes(episodes, False)
 
     def _generate_summary_stats(self):
-        self.env._generate_summary_stats()
+        self.env.generate_summary_stats()
+
+
+

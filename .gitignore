@@ -106,4 +106,5 @@ ENV/
 # vscode
 .vscode
 
-/test_model
+test_model
+document

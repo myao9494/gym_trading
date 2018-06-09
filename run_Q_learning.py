@@ -23,8 +23,8 @@ from gym_trading.envs.Q_learning import Q
 # In[3]:
 
 # csv = "/home/adrian/Escritorio/polinex/LTCBTC.csv"
-csv2 = "/home/adrian/Escritorio/polinex/EURUSD60.csv"
-
+# csv2 = "/home/adrian/Escritorio/polinex/EURUSD60.csv"
+csv = "data/EURUSD60.csv"
 
 # # Create a new OpenAI Gym environment with the customised Trading environment
 # 
@@ -48,7 +48,8 @@ csv2 = "/home/adrian/Escritorio/polinex/EURUSD60.csv"
 # In[4]:
 
 env = gym.make('trading-v0')
-env.initialise_simulator(csv2, ATR=True, trade_period=5, train_split=0.7)
+# env.initialise_simulator(csv2, ATR=True, trade_period=5, train_split=0.7)
+env.initialise_simulator(csv,  trade_period=5, train_split=0.7)
 
 
 # # States map
